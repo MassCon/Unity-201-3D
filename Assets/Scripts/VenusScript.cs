@@ -8,6 +8,7 @@ public class VenusScript : MonoBehaviour
     private GameObject atmosphere;
     private float dayPeriod = 20f / 360f;
     private float skyPeriod = 10f / 360f;
+    
     private void Start()
     {
         surface = GameObject.Find("VenusSurface");
@@ -17,5 +18,7 @@ public class VenusScript : MonoBehaviour
     {
         surface.transform.Rotate(Vector3.up, Time.deltaTime / dayPeriod, Space.Self);
         atmosphere.transform.Rotate(Vector3.up, Time.deltaTime / skyPeriod);
+
+       
     }
 }
