@@ -16,6 +16,8 @@ public class MoonScript : MonoBehaviour
     [SerializeField]
     private float yearPeriod = 36.5f / 360f;
 
+    private  Vector3 moonAxis = Quaternion.Euler(0,0,-30) * Vector3.up;
+
     private void Start()
     {
         earth = GameObject.Find("Earth");
@@ -23,10 +25,10 @@ public class MoonScript : MonoBehaviour
 
     void Update()
     {
-        this.transform.Rotate(Vector3.up, Time.deltaTime / dayPeriod);
+        this.transform.Rotate(moonAxis, Time.deltaTime / dayPeriod);
 
-        this.transform.RotateAround(earth.transform.position,
-            Vector3.up, Time.deltaTime / monthPeriod);
+        this.transform.RotateAround(earth.transform.position, moonAxis,
+            Time.deltaTime / monthPeriod);
 
         this.transform.RotateAround(sun.transform.position,
             Vector3.up, Time.deltaTime / yearPeriod);
