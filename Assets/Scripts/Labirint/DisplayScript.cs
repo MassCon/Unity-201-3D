@@ -23,10 +23,11 @@ public class DisplayScript : MonoBehaviour
 
     void Start()
     {
-        //LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint1Amount), OnCheckPoint1AmountChanged);
-        //LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint2Amount), OnCheckPoint2AmountChanged);
-        //LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint1Passed), OnCheckPointPassed);
-        //LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint2Passed), OnCheckPointPassed);
+        LabirintState.AddNotifyListener(OnLabirinthStateChanged);
+        LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint1Amount), OnCheckPoint1AmountChanged);
+        LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint2Amount), OnCheckPoint2AmountChanged);
+        LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint1Passed), OnCheckPointPassed);
+        LabirintState.AddPropertyListener(nameof(LabirintState.checkPoint2Passed), OnCheckPointPassed);
         gameTime = 0f;
         score = 100;
         StartCoroutine("ScoreReduce");
@@ -70,27 +71,26 @@ public class DisplayScript : MonoBehaviour
     }
     private void OnCheckPoint2AmountChanged()
     {
-        //image2.fillAmount = LabirintState.checkPoint2Amount;
+        image2.fillAmount = LabirintState.checkPoint2Amount;
     }
     private void OnCheckPointPassed()
     {
-        //if (LabirintState.checkPoint2Passed)
-        //{
-        //    checkPointsPassed.text = "2";
-        //}
-        //else
-        if (LabirintState.checkPoint1Passed)
+        if (LabirintState.checkPoint2Passed)
+        {
+            checkPointsPassed.text = "2";
+        }
+        else if (LabirintState.checkPoint1Passed)
         {
             checkPointsPassed.text = "1";
         }
     }
     private void OnDestroy()
     {
-        //LabirintState.RemoveNotifyListener(OnLabirinthStateChanged);
-        //LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint1Amount), OnCheckPoint1AmountChanged);
-        //LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint2Amount), OnCheckPoint2AmountChanged);
+        LabirintState.RemoveNotifyListener(OnLabirinthStateChanged);
+        LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint1Amount), OnCheckPoint1AmountChanged);
+        LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint2Amount), OnCheckPoint2AmountChanged);
 
-        //LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint1Passed), OnCheckPointPassed);
-        //LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint2Passed), OnCheckPointPassed);
+        LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint1Passed), OnCheckPointPassed);
+        LabirintState.RemovePropertyListener(nameof(LabirintState.checkPoint2Passed), OnCheckPointPassed);
     }
 }

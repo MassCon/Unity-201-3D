@@ -102,4 +102,9 @@ public class SphereScript : MonoBehaviour
     {
         collectSound.volume = LabirintState.effectsVolume;
     }
+
+    private void OnDestroy()
+    {
+        LabirintState.RemoveNotifyListener(OnLabirintStateChanged);
+    }
 }
