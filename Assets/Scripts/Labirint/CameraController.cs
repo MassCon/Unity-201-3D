@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject cameraAnchor;
+
     private float camAngleX;
     private float camAngleY;
     private float rodAngleX;
@@ -21,38 +24,65 @@ public class CameraController : MonoBehaviour
         float mx = Input.GetAxis("Mouse X");
         float my = Input.GetAxis("Mouse Y");
 
-        if (camAngleX - my > 60)
+        if (LabirintState.cameraFirtsPerson)
         {
-            camAngleX = 60;
-        }
-        else if (camAngleX - my < 35)
-        {
-            camAngleX = 35;
-        }
-        else
-        {
+            camAngleY += mx;
+
+            rodAngleY += mx;
+
             camAngleX -= my;
 
             rodAngleX -= my;
         }
+        else
+        {
+            if (camAngleX - my > 60)
+            {
+                camAngleX = 60;
+            }
+            else if (camAngleX - my < 35)
+            {
+                camAngleX = 35;
+            }
+            else
+            {
+                camAngleX -= my;
 
-        camAngleY += mx;
+                rodAngleX -= my;
+            }
 
-        rodAngleY += mx;
+            camAngleY += mx;
+
+            rodAngleY += mx;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            LabirintState.cameraFirtsPerson =
+                !LabirintState.cameraFirtsPerson;
+        }
     }
     private void LateUpdate()
     {
-        if (camAngleX > 60)
-        {
-            camAngleX = 60;
-            rodAngleX = 0;
-        }
-        if (camAngleX < 35)
-        {
-            camAngleX = 35;
-            rodAngleX = 0;
-        }
+        //if (camAngleX > 60)
+        //{
+        //    camAngleX = 60;
+        //    rodAngleX = 0;
+        //}
+        //if (camAngleX < 35)
+        //{
+        //    camAngleX = 35;
+        //    rodAngleX = 0;
+        //}
         transform.eulerAngles = new Vector3(camAngleX, camAngleY, 0f);
-        transform.position = Quaternion.Euler(rodAngleX, rodAngleY, 0f) * camRod;
+        if (LabirintState.cameraFirtsPerson)
+        {
+            transform.position = cameraAnchor.transform.position;
+        }
+        else
+        {
+            transform.position = Quaternion.Euler(rodAngleX, rodAngleY, 0f) * camRod;
+        }
+       
     }
 }

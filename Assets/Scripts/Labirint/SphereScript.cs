@@ -7,12 +7,17 @@ public class SphereScript : MonoBehaviour
     //[SerializeField]
     private Rigidbody body;
     private float forceFactor = 500f;
+    private Vector3 anchorOffset;
 
     [SerializeField] private GameObject _camera;
+
+    [SerializeField] private GameObject cameraAnchor;
+
 
     private void Start()
     {
         body = GetComponent<Rigidbody>();
+        anchorOffset = this.transform.position - cameraAnchor.transform.position;
     }
 
     private void Update()
@@ -35,5 +40,6 @@ public class SphereScript : MonoBehaviour
         //Debug.Log(forceFactor * Time.deltaTime * forceDirection);
 
         body.AddForce(forceFactor * Time.deltaTime * forceDirection.normalized);
+        cameraAnchor.transform.position = this.transform.position - anchorOffset;
     }
 }
