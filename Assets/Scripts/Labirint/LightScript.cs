@@ -24,6 +24,8 @@ public class LightScript : MonoBehaviour
     }
     void Update()
     {
+        if (LabirintState.isPaused) return;
+
         if (Input.GetKeyUp(KeyCode.N))
         {
             isDay = !isDay;

@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour
     private Vector3 camRod;
     private void Start()
     {
+        if (LabirintState.isPaused) return;
+
         camAngleX = transform.eulerAngles.x;
         camAngleY = transform.eulerAngles.y;
         camRod = transform.position;
@@ -64,6 +66,8 @@ public class CameraController : MonoBehaviour
     }
     private void LateUpdate()
     {
+        if (LabirintState.isPaused) return;
+
         //if (camAngleX > 60)
         //{
         //    camAngleX = 60;

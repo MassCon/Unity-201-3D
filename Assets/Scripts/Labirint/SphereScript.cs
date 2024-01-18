@@ -14,10 +14,29 @@ public class SphereScript : MonoBehaviour
     [SerializeField] private GameObject cameraAnchor;
 
 
+    // [SerializeField]
+    private AudioSource backgroundMusic;
+    //[SerializeField]
+    private AudioSource collectSound;
+
+
     private void Start()
     {
         body = GetComponent<Rigidbody>();
         anchorOffset = this.transform.position - cameraAnchor.transform.position;
+
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        collectSound = audioSources[0];
+        backgroundMusic = audioSources[1];
+
+        if (!LabirintState.isSoundsMuted)
+        {
+            //backgroundMusic.volume = LabirintState.musicVolume;
+            backgroundMusic.Play();
+        }
+        LabirintState.OnSoundsMuteChanged += SoundsMuteChanged;
+        LabirintState.OnMusicVolumeChanged += MusicVolumeChanged;
+        LabirintState.OnEffectsVolumeChanged += EffectsVolumeChanged;
     }
 
     private void Update()
@@ -41,5 +60,37 @@ public class SphereScript : MonoBehaviour
 
         body.AddForce(forceFactor * Time.deltaTime * forceDirection.normalized);
         cameraAnchor.transform.position = this.transform.position - anchorOffset;
+
+        if (backgroundMusic.volume != LabirintState.musicVolume)
+        {
+            //backgroundMusic.volume = LabirintState.musicVolume;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("CheckPoint"))
+        {
+            if (!LabirintState.isSoundsMuted)
+            {
+                // collectSound.volume = LabirinthState.effectsVolume;
+                collectSound.Play();
+            }
+        }
+    }
+
+    public void SoundsMuteChanged()
+    {
+        backgroundMusic.mute = LabirintState.isSoundsMuted;
+    }
+
+    public void MusicVolumeChanged()
+    {
+        backgroundMusic.volume = LabirintState.musicVolume;
+    }
+
+    public void EffectsVolumeChanged()
+    {
+        collectSound.volume = LabirintState.effectsVolume;
     }
 }
