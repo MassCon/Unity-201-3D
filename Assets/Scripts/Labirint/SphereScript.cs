@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SphereScript : MonoBehaviour
@@ -9,7 +10,8 @@ public class SphereScript : MonoBehaviour
     private float forceFactor = 500f;
     private Vector3 anchorOffset;
 
-    [SerializeField] private GameObject _camera;
+    //[SerializeField]  //solar 
+    private GameObject _camera;
 
     [SerializeField] private GameObject cameraAnchor;
 
@@ -19,9 +21,27 @@ public class SphereScript : MonoBehaviour
     //[SerializeField]
     private AudioSource collectSound;
 
+    private static SphereScript instance = null; //solar
 
     private void Start()
     {
+        //---------------------------------------solar system
+        if (instance != null)
+        {
+            
+            this.transform.position +=
+                new Vector3(0, instance.transform.position.y, 0);
+
+            GameObject.Destroy(instance.gameObject);
+        }
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        _camera = Camera.main.gameObject;
+        Debug.Log("SphereScript::Start");
+        //-------------------------------------
+
+
         body = GetComponent<Rigidbody>();
         anchorOffset = this.transform.position - cameraAnchor.transform.position;
 

@@ -15,6 +15,12 @@ public class CameraScript : MonoBehaviour
 
     private Camera _camera;
 
+    private void Awake()
+    {
+        Debug.Log("Awake: " + LabirintState.checkPoint1Amount);
+    }
+
+
     private void Start()
     {
         camEulerX = transform.eulerAngles.x;

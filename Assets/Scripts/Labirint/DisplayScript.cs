@@ -75,14 +75,14 @@ public class DisplayScript : MonoBehaviour
     }
     private void OnCheckPointPassed()
     {
-        if (LabirintState.checkPoint2Passed)
-        {
-            checkPointsPassed.text = "2";
-        }
-        else if (LabirintState.checkPoint1Passed)
-        {
-            checkPointsPassed.text = "1";
-        }
+        //if (LabirintState.checkPoint2Passed)
+        //{
+        //    checkPointsPassed.text = "2";
+        //}
+        //else if (LabirintState.checkPoint1Passed)
+        //{
+        //    checkPointsPassed.text = "1";
+        //}
     }
     private void OnDestroy()
     {

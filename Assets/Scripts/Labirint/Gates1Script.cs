@@ -15,7 +15,7 @@ public class Gates1Script : MonoBehaviour
         float factor = Time.deltaTime / swingPeriod;
         if (!LabirintState.checkPoint1Passed)
         {
-            factor *= 10f;
+            factor *= 0.1f;
         }
 
         //transform.Translate(factor * Vector3.down);
