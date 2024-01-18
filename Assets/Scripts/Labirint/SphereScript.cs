@@ -37,6 +37,8 @@ public class SphereScript : MonoBehaviour
         LabirintState.OnSoundsMuteChanged += SoundsMuteChanged;
         LabirintState.OnMusicVolumeChanged += MusicVolumeChanged;
         LabirintState.OnEffectsVolumeChanged += EffectsVolumeChanged;
+
+        LabirintState.AddNotifyListener(OnLabirintStateChanged);
     }
 
     private void Update()
@@ -46,7 +48,7 @@ public class SphereScript : MonoBehaviour
         //Vector3 forceDirection = new Vector3(kh, 0, kv);
         //body.AddForce(forceFactor * Time.deltaTime * forceDirection);
 
-        Debug.Log($"{kh} {kv}");
+        //Debug.Log($"{kh} {kv}");
 
         Vector3 right = _camera.transform.right;
         Vector3 forward = _camera.transform.forward;
@@ -61,10 +63,12 @@ public class SphereScript : MonoBehaviour
         body.AddForce(forceFactor * Time.deltaTime * forceDirection.normalized);
         cameraAnchor.transform.position = this.transform.position - anchorOffset;
 
-        if (backgroundMusic.volume != LabirintState.musicVolume)
-        {
-            //backgroundMusic.volume = LabirintState.musicVolume;
-        }
+        //if (backgroundMusic.volume != LabirintState.musicVolume)
+        //{
+        //    //backgroundMusic.volume = LabirintState.musicVolume;
+        //}
+
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -77,6 +81,11 @@ public class SphereScript : MonoBehaviour
                 collectSound.Play();
             }
         }
+    }
+
+    private void OnLabirintStateChanged(string propertyName)
+    {
+        //Debug.Log("OnLabirintStateChanged:" + propertyName);
     }
 
     public void SoundsMuteChanged()

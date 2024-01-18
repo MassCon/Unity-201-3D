@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -14,8 +15,8 @@ public class PauseMenuScript : MonoBehaviour
 
     void Start()
     {
-        LabirintState.musicVolume = musicVolumeSlider.value;
-        LabirintState.effectsVolume = effectsVolumeSlider.value;
+        OnMusicVolumeChanged(musicVolumeSlider.value);
+        OnEffectsVolumeChanged(effectsVolumeSlider.value);
         LabirintState.isSoundsMuted = muteAllToggle.isOn;
 
         if (content.activeInHierarchy)
@@ -37,15 +38,34 @@ public class PauseMenuScript : MonoBehaviour
     public void OnMusicVolumeChanged(float volume)
     {
         LabirintState.MusicVolumeChanged(volume);
-        soundMixer.SetFloat("MusicVolume", -80*volume);
+        if (!LabirintState.isSoundsMuted)
+        {
+            float dB = -80f + 90f * volume;
+            soundMixer.SetFloat("MusicVolume", dB);
+        }
     }
     public void OnEffectsVolumeChanged(float volume)
     {
         LabirintState.EffectsVolumeChanged(volume);
+        if (!LabirintState.isSoundsMuted)
+        {
+            float dB = -80f + 90f * volume;
+            soundMixer.SetFloat("EffectsVolume", dB);
+        }
     }
     public void OnMuteAllChanged(bool value)
     {
         LabirintState.SoundsMuteChanged(value);
+        if (value)
+        {
+            soundMixer.SetFloat("EffectsVolume", -80f);
+            soundMixer.SetFloat("MusicVolume", -80f);
+        }
+        else
+        {
+            OnMusicVolumeChanged(LabirintState.effectsVolume);
+            OnEffectsVolumeChanged(LabirintState.musicVolume);
+        }
     }
     private void ShowMenu()
     {
@@ -57,4 +77,35 @@ public class PauseMenuScript : MonoBehaviour
         content.SetActive(false);
         Time.timeScale = 1f;
     }
+
+    public void OnMenuButtonClick(int value) {
+        Debug.Log(value.ToString());
+
+        switch (value)
+        {
+            case 1: //exit
+                if (Application.isEditor)
+                {
+                    EditorApplication.ExitPlaymode();
+                    //EditorApplication.Exit(0);
+                }
+                else
+                {
+                    Application.Quit(0);
+                }
+                break;
+            case 2: //restore
+                OnMusicVolumeChanged(0.5f);
+                OnEffectsVolumeChanged(0.5f);
+                OnMuteAllChanged(false);
+                break;
+            case 3: //close
+                HideMenu();
+                break;
+            default:
+                Debug.LogError($"Undefined button click{value}");
+                break;
+        }
+    }
+
 }
