@@ -223,8 +223,25 @@ public class PauseMenuScript : MonoBehaviour
     [SerializeField]
     private AudioMixer soundMixer;
 
+    [SerializeField] private TMP_Dropdown dropdown;
+
     void Start()
     {
+        string[] names = QualitySettings.names;
+        if (names.Length != dropdown.options.Count)
+        {
+            dropdown.options.Clear();
+            for (int i = 0; i < names.Length; i++)
+            {
+                dropdown.options.Add(new TMP_Dropdown.OptionData(names[i]));
+            }
+            dropdown.value = QualitySettings.GetQualityLevel();
+        }
+        else
+        {
+            OnQualityDropdownChanged(dropdown.value);
+        }
+
         OnMusicVolumeChanged(musicVolumeSlider.value);
         OnEffectsVolumeChanged(effectsVolumeSlider.value);
         LabirintState.isSoundsMuted = muteAllToggle.isOn;
@@ -321,5 +338,11 @@ public class PauseMenuScript : MonoBehaviour
                 Debug.LogError($"Undefined button click detected: value '{value}'");
                 break;
         }
+    }
+
+    public void OnQualityDropdownChanged(int value)
+    {
+        Debug.Log(value);
+        QualitySettings.SetQualityLevel(value, true);
     }
 }
